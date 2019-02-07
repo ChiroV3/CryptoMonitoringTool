@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CryptoMonitoringTool.Business.API;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,13 @@ namespace CryptoMonitoringTool
     {
         public MainWindow()
         {
+            Bittrex bittrex;
             InitializeComponent();
+        }
+
+        private void MyTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
