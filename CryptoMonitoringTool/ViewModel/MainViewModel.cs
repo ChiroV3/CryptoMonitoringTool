@@ -3,9 +3,11 @@ using CryptoMonitoringTool.Business.Models;
 using CryptoMonitoringTool.Business.Services;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CryptoMonitoringTool.ViewModel
 {
@@ -136,6 +138,7 @@ namespace CryptoMonitoringTool.ViewModel
                     async () =>
                     {
                         CryptoMarketNames.Add(CurrentCryptoCurrency);
+                        RefreshCryptoCollection();
                     }
                     ));
             }
@@ -151,16 +154,21 @@ namespace CryptoMonitoringTool.ViewModel
             {
                 while (true)
                 {
-                    var collection =  MarketService.GetTickersForMarketNames(CryptoMarketNames);
-                    CryptoCollection.Clear();
-                    foreach (var ticker in collection)
-                    {
-                        CryptoCollection.Add(ticker);
-                    }
+                    RefreshCryptoCollection();
                     await Task.Delay(60000);
                 }
             });
 
+        }
+
+        public void RefreshCryptoCollection()
+        {
+            var collection = MarketService.GetTickersForMarketNames(CryptoMarketNames);
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => this.CryptoCollection.Clear()));
+            foreach (var ticker in collection)
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => this.CryptoCollection.Add(ticker)));
+            }
         }
         #endregion
     }

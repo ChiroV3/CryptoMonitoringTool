@@ -22,17 +22,17 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,50,0,0">Podaj Kryptowalutę</Label>
-            <TextBox Name="MyTextBox"  HorizontalAlignment="Center" Height="25" Text="{Binding CurrentCryptoCurrency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Name="MyTextBox"  HorizontalAlignment="Center" Height="25" Width="100" Text="{Binding CurrentCryptoCurrency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" Height="25" Command="{Binding AddCryptoCurrencyCommand}" >Dodaj</Button>
         </Grid>
         <ListView Grid.Column="2" ItemsSource="{Binding CryptoCollection, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel>
-                        <TextBlock Text="{Binding MarketName, StringFormat={}Para: {0}}"/>
-                        <TextBlock Text="{Binding Bid, StringFormat={}Bid: {0}}" />
-                        <TextBlock Text="{Binding Ask, StringFormat={}Ask: {0}}" />
-                        <TextBlock Text="{Binding Last, StringFormat={}Last: {0}}" />
+                        <TextBlock Margin="10,0,0,0" Text="{Binding MarketName, StringFormat={}Para: {0}}"/>
+                        <TextBlock Margin="10,0,0,0" Text="{Binding Bid, StringFormat={}Bid: {0}}" />
+                        <TextBlock Margin="10,0,0,0" Text="{Binding Ask, StringFormat={}Ask: {0}}" />
+                        <TextBlock Margin="10,0,0,0" Text="{Binding Last, StringFormat={}Last: {0}}" />
                     </WrapPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
