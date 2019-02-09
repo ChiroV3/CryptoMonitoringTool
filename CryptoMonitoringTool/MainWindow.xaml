@@ -8,31 +8,31 @@
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-
-
-
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Label Margin="28,59,68,123">Podaj Kryptowalutę</Label>
-            <TextBox Name="MyTextBox" Margin="28,92,68,93" Height="25" Width="300" TextChanged="MyTextBox_TextChanged" />
-            <Button Height="25" Margin="333,92,10,92">Dodaj</Button>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,50,0,0">Podaj Kryptowalutę</Label>
+            <TextBox Name="MyTextBox"  HorizontalAlignment="Center" Height="25" Text="{Binding CurrentCryptoCurrency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1" Height="25" Command="{Binding AddCryptoCurrencyCommand}" >Dodaj</Button>
         </Grid>
         <ListView Grid.Column="2" ItemsSource="{Binding CryptoCollection, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel>
-                        <TextBlock Text="MarketName: " />
-                        <TextBlock Text="Bid: " />
-                        <TextBlock Text="Ask: " />
-                        <TextBlock Text="Last: " />
+                        <TextBlock Text="{Binding MarketName, StringFormat={}Para: {0}}"/>
+                        <TextBlock Text="{Binding Bid, StringFormat={}Bid: {0}}" />
+                        <TextBlock Text="{Binding Ask, StringFormat={}Ask: {0}}" />
+                        <TextBlock Text="{Binding Last, StringFormat={}Last: {0}}" />
                     </WrapPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
