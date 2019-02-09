@@ -8,6 +8,34 @@
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBlock Text="{Binding Title,UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Label Margin="28,59,68,123">Podaj Kryptowalutę</Label>
+            <TextBox Name="MyTextBox" Margin="28,92,68,93" Height="25" Width="300" TextChanged="MyTextBox_TextChanged" />
+            <Button Height="25" Margin="333,92,10,92">Dodaj</Button>
+        </Grid>
+        <ListView Grid.Column="2" ItemsSource="{Binding CryptoCollection, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel>
+                        <TextBlock Text="MarketName: " />
+                        <TextBlock Text="Bid: " />
+                        <TextBlock Text="Ask: " />
+                        <TextBlock Text="Last: " />
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Window>

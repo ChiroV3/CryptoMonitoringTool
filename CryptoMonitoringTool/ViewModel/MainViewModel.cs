@@ -1,4 +1,8 @@
+using CryptoMonitoringTool.Business.API;
+using CryptoMonitoringTool.Business.Models;
 using GalaSoft.MvvmLight;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace CryptoMonitoringTool.ViewModel
 {
@@ -21,6 +25,13 @@ namespace CryptoMonitoringTool.ViewModel
         /// </summary>
         public MainViewModel()
         {
+
+            Bittrex bittrex = new Bittrex();
+            await bittrex.GetTicker();
+            CryptoCollection = new ObservableCollection<Ticker>();
+
+            CryptoCollection.Add(bittrex.GetTicker("ETH-BTC"));
+
             Title = "NASZA APKA";
             ////if (IsInDesignMode)
             ////{
@@ -30,6 +41,13 @@ namespace CryptoMonitoringTool.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
+        }
+
+        //po evencie dodania i po intervale jakims to uruchomic
+        public ObservableCollection<Ticker> GetCryptoCollection(List<string> marketNames)
+        {
+            //return .Getcollection(marketNames);
+            return null;
         }
 
         #region Properties
@@ -47,6 +65,24 @@ namespace CryptoMonitoringTool.ViewModel
                 {
                     _title = value;
                     RaisePropertyChanged("Title");
+                }
+            }
+        }
+
+        private ObservableCollection<Ticker> _cryptoCollection;
+        public ObservableCollection<Ticker> CryptoCollection
+        {
+
+            get
+            {
+                return _cryptoCollection;
+            }
+            set
+            {
+                if (value != _cryptoCollection)
+                {
+                    _cryptoCollection = value;
+                    RaisePropertyChanged("CryptoCollection");
                 }
             }
         }
