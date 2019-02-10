@@ -112,5 +112,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CryptoMonitoringTool.Business\CryptoMonitoringTool.Business.csproj">
+      <Project>{4BC21131-E8E0-4A2B-BA7B-15D5885A5BB6}</Project>
+      <Name>CryptoMonitoringTool.Business</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

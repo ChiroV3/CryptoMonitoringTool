@@ -1,7 +1,13 @@
+using CryptoMonitoringTool.Business.API;
 using CryptoMonitoringTool.Business.Models;
+using CryptoMonitoringTool.Business.Services;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace CryptoMonitoringTool.ViewModel
 {
@@ -24,10 +30,13 @@ namespace CryptoMonitoringTool.ViewModel
         /// </summary>
         public MainViewModel()
         {
+            Bittrex bittrex = new Bittrex();
+            MarketService = new MarketService(bittrex);
+            CryptoCollection = new ObservableCollection<Ticker>();
+            CryptoMarketNames = new List<string>();
+            BackgroundChecking();
             Title = "NASZA APKA";
 
-            CryptoCollection = new ObservableCollection<Ticker>();
-            
             ////if (IsInDesignMode)
             ////{
             ////    // Code runs in Blend --> create design time data.
@@ -38,10 +47,7 @@ namespace CryptoMonitoringTool.ViewModel
             ////}
         }
 
-        public ObservableCollection<Ticker> GetCryptoCollection(List<string> marketNames)
-        {
-            //return apiservice.Getcollection(marketnames)
-        }
+        public MarketService MarketService { get; set; }
 
         #region Properties
         private string _title;
@@ -62,6 +68,42 @@ namespace CryptoMonitoringTool.ViewModel
             }
         }
 
+        private string _currentCryptoCurrency;
+        public string CurrentCryptoCurrency
+        {
+
+            get
+            {
+                return _currentCryptoCurrency;
+            }
+            set
+            {
+                if (value != _currentCryptoCurrency)
+                {
+                    _currentCryptoCurrency = value;
+                    RaisePropertyChanged("CurrentCryptoCurrency");
+                }
+            }
+        }
+
+        private List<string> _cryptoMarketNames;
+        public List<string> CryptoMarketNames
+        {
+
+            get
+            {
+                return _cryptoMarketNames;
+            }
+            set
+            {
+                if (value != _cryptoMarketNames)
+                {
+                    _cryptoMarketNames = value;
+                    RaisePropertyChanged("CryptoMarketNames");
+                }
+            }
+        }
+
         private ObservableCollection<Ticker> _cryptoCollection;
         public ObservableCollection<Ticker> CryptoCollection
         {
@@ -77,6 +119,55 @@ namespace CryptoMonitoringTool.ViewModel
                     _cryptoCollection = value;
                     RaisePropertyChanged("CryptoCollection");
                 }
+            }
+        }
+
+        #endregion
+
+        #region COMMANDS
+
+        private RelayCommand _addCryptoCurrencyCommand;
+
+        public RelayCommand AddCryptoCurrencyCommand
+        {
+            get
+            {
+
+                return _addCryptoCurrencyCommand
+                    ?? (_addCryptoCurrencyCommand = new RelayCommand(
+                    async () =>
+                    {
+                        CryptoMarketNames.Add(CurrentCryptoCurrency);
+                        RefreshCryptoCollection();
+                    }
+                    ));
+            }
+
+        }
+        #endregion
+
+        #region Methods
+
+        public async void BackgroundChecking()
+        {
+            await Task.Run(async () =>
+            {
+                while (true)
+                {
+                    RefreshCryptoCollection();
+                    await Task.Delay(60000);
+                }
+            });
+
+        }
+
+        public void RefreshCryptoCollection()
+        {
+            var collection = MarketService.GetTickersForMarketNames(CryptoMarketNames);
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => this.CryptoCollection.Clear()));
+            foreach (var ticker in collection)
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => this.CryptoCollection.Add(ticker)));
             }
         }
         #endregion

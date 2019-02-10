@@ -21,6 +21,7 @@ namespace CryptoMonitoringTool.Business.API
         {
 
         }
+
         #region Public Api
         public virtual async Task<IEnumerable<Market>> GetMarkets()
         {

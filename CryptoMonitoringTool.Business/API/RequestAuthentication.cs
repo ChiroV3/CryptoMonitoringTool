@@ -16,7 +16,5 @@ namespace CryptoMonitoringTool.Business.API
             this.Uri = uri;
             this.Hash = hash;
         }
-
-        
     }
 }

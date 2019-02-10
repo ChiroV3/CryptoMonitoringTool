@@ -11,26 +11,25 @@ namespace CryptoMonitoringTool.Business.Services
     public class MarketService
     {
         private readonly IExchange exchange;
-        public MarketService()
+
+        public MarketService(IExchange exchange)
         {
-            exchange = new Bittrex();
+            this.exchange = exchange;
         }
-
-        public Task<IEnumerable<Market>> GetMarkets()
-        {
-            return exchange.GetMarkets();
-        }
-
-        public Task<IEnumerable<Market>> GetUserMarkets(string UserId)
-        {
-            return exchange.GetMarkets(); // for user 
-
-        }
-
         
+        /// <summary>
+        /// returns list of tickers for given market names in supported format for example "LTC-BTC"
+        /// </summary>
+        public List<Ticker> GetTickersForMarketNames(List<string> marketNames)
+        {
+            List<Ticker> tickers = new List<Ticker>();
+            foreach(string market in marketNames)
+            {
+                tickers.Add(exchange.GetTicker(market).Result);
+            }
 
-
-
-
+            return tickers;
+        }
     }
+
 }
